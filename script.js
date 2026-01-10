@@ -17,20 +17,33 @@ function handleLogin(event) {
 
   const username = (document.getElementById("username") || {}).value?.trim() || "";
   const password = (document.getElementById("password") || {}).value || "";
+  const messageEl = document.getElementById("login-message");
 
   if (!username || !password) {
     alert("Please enter both username and password.");
     return;
   }
 
-  // Hardcoded login for testing
-  if (username === "John Williams" && password === "Password123") {
-    alert("Login successful!");
-    window.location.href = "dashboard.html"; // redirect to dashboard
-  } else {
-    alert("Invalid username or password.");
-  }
+  // Show loading message first
+  messageEl.style.color = "blue";
+  messageEl.textContent = "Checking credentials...";
+
+  // Simulate server delay (e.g., 1.5 seconds)
+  setTimeout(() => {
+    if (username === "John Williams" && password === "Password123") {
+      messageEl.style.color = "green";
+      messageEl.textContent = "Login successful! Redirecting...";
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html"; // redirect after a short pause
+      }, 1000); // 1 second delay before redirect
+    } else {
+      messageEl.style.color = "red";
+      messageEl.textContent = "Invalid username or password.";
+    }
+  }, 1500); // 1.5 seconds loading
 }
+
 
 function handleLogout(event) {
   // If you use server-side sessions, call logout endpoint first (optional).
