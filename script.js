@@ -187,7 +187,8 @@ balanceEl.textContent = "$" + totalBalance.toLocaleString(undefined, { minimumFr
   logoutBtn && logoutBtn.addEventListener("click", () => window.location.href = "index.html");
 
 });
-
+const eyeOpen = document.getElementById("eye-open");
+const eyeClosed = document.getElementById("eye-closed");
 const toggleBtn = document.getElementById("toggle-balance");
 const sensitiveBalances = document.querySelectorAll(".sensitive");
 
@@ -210,6 +211,13 @@ toggleBtn.addEventListener("click", () => {
     }
   });
 
-  toggleBtn.textContent = visible ? "👁‍🗨" : "👁";
+  if (visible) {
+  eyeOpen.style.display = "none";
+  eyeClosed.style.display = "block";
+} else {
+  eyeOpen.style.display = "block";
+  eyeClosed.style.display = "none";
+}
+  
   visible = !visible;
 });
