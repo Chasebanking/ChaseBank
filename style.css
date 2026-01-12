@@ -562,3 +562,22 @@ canvas#spendingChart { width: 100% !important; height: 200px !important; }
 .logout-btn:hover {
   background: #1d4ed8;
 }
+
+#toggleAccountNumber {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+#logoutBtn {
+  background-color: #dc3545; /* red */
+  color: #fff;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 10px;
+  border: none;
+  transition: 0.3s;
+}
+
+#logoutBtn:hover {
+  opacity: 0.85;
+}
