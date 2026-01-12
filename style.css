@@ -549,3 +549,16 @@ canvas#spendingChart { width: 100% !important; height: 200px !important; }
     font-size: 22px;
   }
 }
+
+.logout-btn {
+  background: #2563eb;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background: #1d4ed8;
+}
