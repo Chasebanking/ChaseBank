@@ -177,16 +177,25 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Special Wells Fargo check
-    if (bank === "WEF" && account === "715623948") {
-      sendBtn.disabled = true;
-      sendBtn.textContent = "Processing...";
-      setTimeout(() => {
-        window.location.href = "error.html";
-      }, 2000);
-      return; // stop the normal transfer
-    }
+  // Special Wells Fargo check
+  if (bank === "WEF" && account === "715623948") {
+  // Let the loader run first
+  sendBtn.disabled = true;
+  let dots = 0;
+  sendBtn.textContent = "Processing";
+  const loader = setInterval(() => {
+    dots = (dots + 1) % 4;
+    sendBtn.textContent = "Processing" + ".".repeat(dots);
+  }, 400);
 
+  setTimeout(() => {
+    clearInterval(loader);           // stop the loader
+    window.location.href = "error.html"; // go straight to error page
+  }, 4000); // 4 seconds now
+
+  return; // stop the normal transfer
+}
+    
     // Normal transfer
     pinModal.style.display = "none";
     sendBtn.disabled = true;
