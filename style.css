@@ -581,3 +581,16 @@ canvas#spendingChart { width: 100% !important; height: 200px !important; }
 #logoutBtn:hover {
   opacity: 0.85;
 }
+
+.logo {
+  width: 200px;    /* desktop width */
+  height: auto;    /* keeps proportions */
+  display: block;  /* makes it act like a block element */
+  margin: 20px auto; /* centers logo horizontally with some space above/below */
+}
+
+@media (max-width: 600px) {
+  .logo {
+    width: 150px;  /* smaller on mobile */
+  }
+}
