@@ -407,6 +407,21 @@ setTimeout(() => {
     });
   }
 
+    // ===== DOWNLOAD RECEIPT =====
+const downloadBtn = document.getElementById("download-receipt-btn");
+if (downloadBtn) {
+  downloadBtn.onclick = () => {
+    const receipt = document.getElementById("receipt");
+    html2pdf().from(receipt).save();
+  };
+}
+
+// Optional: Close Success Modal
+function closeSuccess() {
+  const modal = document.getElementById("success-modal");
+  if (modal) modal.style.display = "none";
+}
+        
   // ===== PROFILE PANEL =====
   const profileBtn = document.getElementById("profile-btn");
   const profilePanel = document.getElementById("profile-panel");
