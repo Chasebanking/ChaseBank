@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fullName: "Charles Williams",
       email: "Charlesweahh@gmail.com",
       phone: "+1 510 367 1796",
-      password: "1346000",
+      password: "2468000",
       emailNotif: true,
       smsNotif: false
     };
