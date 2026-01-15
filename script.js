@@ -1,57 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
-// ===== GLOBAL DEMO USER =====
-let demoUser = JSON.parse(localStorage.getItem("demoUser"));
-if (!demoUser) {
-  demoUser = {
-    fullName: "Charles Williams",
-    email: "Charlesweahh@gmail.com",
-    phone: "+1 510 367 1796",
-    password: "1346000",
-    emailNotif: true,
-    smsNotif: false
-  };
-  localStorage.setItem("demoUser", JSON.stringify(demoUser));
-}
 
-     // ✅ Update global demoUser and localStorage
-      demoUser.password = newP;
-      localStorage.setItem("demoUser", JSON.stringify(demoUser));
-      passwordMessage.textContent = "Password changed successfully ✔";
-      passwordMessage.className = "success";
-
-      passwordForm.reset();
-    });
+  // ===== GLOBAL DEMO USER =====
+  let demoUser = JSON.parse(localStorage.getItem("demoUser"));
+  if (!demoUser) {
+    demoUser = {
+      fullName: "Charles Williams",
+      email: "Charlesweahh@gmail.com",
+      phone: "+1 510 367 1796",
+      password: "1346000",
+      emailNotif: true,
+      smsNotif: false
+    };
+    localStorage.setItem("demoUser", JSON.stringify(demoUser));
   }
-
-  // ===== LOGOUT =====
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("loggedIn");
-      window.location.href = "index.html";
-    });
-  }
-
-});
 
   // ===== INITIAL TRANSACTIONS =====
   let savedTransactions = JSON.parse(localStorage.getItem("transactions")) || [];
   if (!savedTransactions.length) {
     savedTransactions = [
       { type: "expense", text: "Netflix — Entertainment", amount: "$150", date: "2026-01-05" },
-      { type: "income", text: "Salary — Deposit", amount: "$69000", date: "2026-01-09" },
+      { type: "income", text: "Salary — Deposit", amount: "$69000", date: "2026-01-09" }
     ];
     localStorage.setItem("transactions", JSON.stringify(savedTransactions));
   }
 
-  // ===== LOGIN FORM HANDLER =====
+  // ===== TOTAL BALANCE =====
+  const balanceEl = document.querySelector(".balance");
+  let totalBalance = parseFloat(localStorage.getItem("totalBalance"));
+  if (!totalBalance) totalBalance = balanceEl ? parseFloat(balanceEl.textContent.replace(/[$,]/g, "")) : 0;
+  if (balanceEl) balanceEl.textContent = "$" + totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // ===== LOGIN FORM =====
   const loginForm = document.getElementById("login-form");
   const messageEl = document.getElementById("login-message");
-
   if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
+    loginForm.addEventListener("submit", e => {
       e.preventDefault();
-
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
 
@@ -61,19 +45,15 @@ if (!demoUser) {
         return;
       }
 
-      // Show checking message
       messageEl.style.color = "blue";
       messageEl.textContent = "Checking credentials...";
 
       setTimeout(() => {
         if (username === demoUser.fullName && password === demoUser.password) {
-          localStorage.setItem("loggedIn", "true"); // key that dashboard checks
+          localStorage.setItem("loggedIn", "true");
           messageEl.style.color = "green";
           messageEl.textContent = "Login successful! Redirecting...";
-
-          setTimeout(() => {
-            window.location.href = "dashboard.html";
-          }, 500); // short delay
+          setTimeout(() => window.location.href = "dashboard.html", 500);
         } else {
           messageEl.style.color = "red";
           messageEl.textContent = "Invalid username or password.";
@@ -82,25 +62,17 @@ if (!demoUser) {
     });
   }
 
-  // ===== AUTO REDIRECT IF ALREADY LOGGED IN =====
+  // ===== AUTO REDIRECT IF LOGGED IN =====
   if (localStorage.getItem("loggedIn") && window.location.pathname.endsWith("index.html")) {
-    // Already logged in, skip login
     window.location.href = "dashboard.html";
   }
-});
 
   // ===== DASHBOARD ELEMENTS =====
   const sendForm = document.getElementById("send-money-form");
   const toggleTransferBtn = document.getElementById("toggle-transfer-btn");
-  const balanceEl = document.querySelector(".balance");
   const transactionsList = document.querySelector(".transactions-card ul");
 
-  // ===== BALANCE =====
-  let totalBalance = parseFloat(localStorage.getItem("totalBalance"));
-  if (!totalBalance) totalBalance = balanceEl ? parseFloat(balanceEl.textContent.replace(/[$,]/g, "")) : 0;
-  if (balanceEl) balanceEl.textContent = "$" + totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-  // ===== RENDER TRANSACTIONS =====
+  // Render Transactions
   if (transactionsList) {
     transactionsList.innerHTML = "";
     savedTransactions.forEach(tx => {
@@ -111,7 +83,7 @@ if (!demoUser) {
     });
   }
 
-  // ===== MONTHLY CHART =====
+  // ===== CHART =====
   try {
     const spendingCanvas = document.getElementById("spendingChart");
     if (spendingCanvas) {
@@ -149,15 +121,49 @@ if (!demoUser) {
     }
   } catch(e) { console.error("Chart error:", e); }
 
-  // ===== TOGGLE TRANSFER FORM =====
-  if (toggleTransferBtn && sendForm) {
-    toggleTransferBtn.addEventListener("click", () => {
-      sendForm.style.display = sendForm.style.display === "block" ? "none" : "block";
-      toggleTransferBtn.textContent = sendForm.style.display === "block" ? "Hide Transfer Form" : "Transfer Funds";
+  // ===== LOGOUT =====
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "index.html";
+  });
+
+  // ===== PASSWORD CHANGE =====
+  const passwordForm = document.getElementById("password-form");
+  if (passwordForm) {
+    const passwordMessage = document.getElementById("password-message");
+    passwordForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const current = document.getElementById("currentPassword").value;
+      const newP = document.getElementById("newPassword").value;
+      const confirmP = document.getElementById("confirmPassword").value;
+
+      if (current !== demoUser.password) {
+        passwordMessage.textContent = "Current password is incorrect!";
+        passwordMessage.className = "error";
+        return;
+      }
+      if (newP.length < 6) {
+        passwordMessage.textContent = "New password must be at least 6 characters!";
+        passwordMessage.className = "error";
+        return;
+      }
+      if (newP !== confirmP) {
+        passwordMessage.textContent = "New passwords do not match!";
+        passwordMessage.className = "error";
+        return;
+      }
+
+      demoUser.password = newP;
+      localStorage.setItem("demoUser", JSON.stringify(demoUser));
+      passwordMessage.textContent = "Password changed successfully ✔";
+      passwordMessage.className = "success";
+
+      passwordForm.reset();
     });
   }
 
-  // ===== PIN MODAL =====
+  // ===== PIN MODAL & SEND MONEY =====
   const pinModal = document.createElement("div");
   pinModal.id = "pinModal";
   pinModal.style.cssText = "display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center;font-family:Arial,sans-serif;";
@@ -180,7 +186,7 @@ if (!demoUser) {
   const confirmBtn = document.getElementById("confirmPinBtn");
   const cancelBtn = document.getElementById("cancelPinBtn");
   const correctPin = "2027";
-  cancelBtn.onclick = () => pinModal.style.display = "none";
+  if (cancelBtn) cancelBtn.onclick = () => pinModal.style.display = "none";
 
   const accountInput = document.getElementById("account");
   const amountInput = document.getElementById("amount");
@@ -190,9 +196,8 @@ if (!demoUser) {
   const sendBtn = document.getElementById("send-btn");
   const maxAttempts = 3;
 
-  // ===== SEND MONEY =====
   if (sendForm) {
-    sendForm.addEventListener("submit", (e) => {
+    sendForm.addEventListener("submit", e => {
       e.preventDefault();
       const amount = parseFloat(amountInput.value);
       const recipient = recipientInput.value.trim();
@@ -200,8 +205,7 @@ if (!demoUser) {
       const account = accountInput.value.trim();
       const note = noteInput.value.trim();
 
-      if (!bank || !recipient || !account || isNaN(amount) || amount <= 0) return;
-      if (amount > totalBalance) return;
+      if (!bank || !recipient || !account || isNaN(amount) || amount <= 0 || amount > totalBalance) return;
 
       pinModal.style.display = "flex";
       pinInput.value = "";
@@ -213,14 +217,12 @@ if (!demoUser) {
         const enteredPin = pinInput.value.trim();
         if (enteredPin !== correctPin) {
           attemptsLeft--;
-          if (attemptsLeft > 0) {
-            pinMessage.textContent = `Incorrect PIN. ${attemptsLeft} attempt(s) remaining.`;
-            pinInput.value = "";
-            pinInput.focus();
-          } else {
-            pinMessage.textContent = "Maximum attempts reached. Try again later.";
-            setTimeout(() => pinModal.style.display = "none", 1000);
-          }
+          pinMessage.textContent = attemptsLeft > 0 
+            ? `Incorrect PIN. ${attemptsLeft} attempt(s) remaining.` 
+            : "Maximum attempts reached. Try again later.";
+          if (attemptsLeft <= 0) setTimeout(() => pinModal.style.display = "none", 1000);
+          pinInput.value = "";
+          pinInput.focus();
           return;
         }
 
@@ -230,75 +232,52 @@ if (!demoUser) {
           sendBtn.disabled = true;
           let dots = 0;
           sendBtn.textContent = "Processing";
-          const loader = setInterval(() => {
-            dots = (dots + 1) % 4;
-            sendBtn.textContent = "Processing" + ".".repeat(dots);
-          }, 400);
-
-          setTimeout(() => {
-            clearInterval(loader);
-            sendForm.style.display = "none";
-            toggleTransferBtn.textContent = "Transfer Funds";
-            window.location.href = "error.html";
-          }, 4000);
+          const loader = setInterval(() => { dots = (dots + 1) % 4; sendBtn.textContent = "Processing" + ".".repeat(dots); }, 400);
+          setTimeout(() => { clearInterval(loader); sendForm.style.display = "none"; toggleTransferBtn.textContent = "Transfer Funds"; window.location.href = "error.html"; }, 4000);
           return;
         }
 
-        // ===== NORMAL TRANSFER =====
-pinModal.style.display = "none";
-sendBtn.disabled = true;
-const originalText = sendBtn.textContent;
-let dots = 0;
-sendBtn.textContent = "Processing";
-const loader = setInterval(() => {
-  dots = (dots + 1) % 4;
-  sendBtn.textContent = "Processing" + ".".repeat(dots);
-}, 400); // fast animation (0.4 sec per dot)
+        // Normal transfer
+        pinModal.style.display = "none";
+        sendBtn.disabled = true;
+        const originalText = sendBtn.textContent;
+        let dots = 0;
+        sendBtn.textContent = "Processing";
+        const loader = setInterval(() => { dots = (dots + 1) % 4; sendBtn.textContent = "Processing" + ".".repeat(dots); }, 400);
 
-setTimeout(() => {
-  clearInterval(loader);
+        setTimeout(() => {
+          clearInterval(loader);
+          totalBalance -= amount;
+          balanceEl.textContent = "$" + totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  // Deduct balance
-  totalBalance -= amount;
-  balanceEl.textContent = "$" + totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          const txText = `Transfer to ${recipient} (${bank})${note ? " — " + note : ""}`;
+          const tx = { type: "expense", text: txText, amount: "-$" + amount.toLocaleString(), date: new Date().toISOString().split("T")[0] };
+          savedTransactions.unshift(tx);
+          localStorage.setItem("totalBalance", totalBalance);
+          localStorage.setItem("transactions", JSON.stringify(savedTransactions));
 
-  // Save transaction
-  const txText = `Transfer to ${recipient} (${bank})${note ? " — " + note : ""}`;
-  const tx = {
-    type: "expense",
-    text: txText,
-    amount: "-$" + amount.toLocaleString(),
-    date: new Date().toISOString().split("T")[0]
-  };
-  savedTransactions.unshift(tx);
-  localStorage.setItem("totalBalance", totalBalance);
-  localStorage.setItem("transactions", JSON.stringify(savedTransactions));
+          const li = document.createElement("li");
+          li.classList.add("expense");
+          li.innerHTML = `<span>${tx.text}</span><span>${tx.amount}</span>`;
+          transactionsList.insertBefore(li, transactionsList.firstChild);
 
-  // Update UI transaction list
-  const li = document.createElement("li");
-  li.classList.add("expense");
-  li.innerHTML = `<span>${tx.text}</span><span>${tx.amount}</span>`;
-  transactionsList.insertBefore(li, transactionsList.firstChild);
+          // Receipt
+          document.getElementById("r-id").textContent = "TXN-" + Math.floor(Math.random() * 100000000);
+          document.getElementById("r-name").textContent = recipient;
+          document.getElementById("r-amount").textContent = "$" + amount.toLocaleString();
+          document.getElementById("r-date").textContent = new Date().toLocaleString();
+          document.getElementById("success-modal").style.display = "flex";
 
-  // ===== RECEIPT =====
-  const txnId = "TXN-" + Math.floor(Math.random() * 100000000);
-  const dateStr = new Date().toLocaleString();
-  document.getElementById("r-id").textContent = txnId;
-  document.getElementById("r-name").textContent = recipient;
-  document.getElementById("r-amount").textContent = "$" + amount.toLocaleString();
-  document.getElementById("r-date").textContent = dateStr;
+          sendForm.reset();
+          sendBtn.disabled = false;
+          sendBtn.textContent = originalText;
+          sendForm.style.display = "none";
+          toggleTransferBtn.textContent = "Transfer Funds";
 
-  // Show custom success modal
-  document.getElementById("success-modal").style.display = "flex";
-
-  // Reset form & button
-  sendForm.reset();
-  sendBtn.disabled = false;
-  sendBtn.textContent = originalText;
-  sendForm.style.display = "none";
-  toggleTransferBtn.textContent = "Transfer Funds";
-
-}, 4000); // total processing = 4 sec
+        }, 4000);
+      };
+    });
+  }
 
   // ===== QUICK BUTTONS =====
   const quickBtns = document.querySelectorAll('.quick-btn');
@@ -379,13 +358,6 @@ setTimeout(() => {
     });
   }
 
-  // ===== LOGOUT =====
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("loggedIn");
-    window.location.href = "index.html";
-  });
-
   // ===== BALANCE TOGGLE =====
   const balanceToggleBtn = document.getElementById("toggle-balance");
   const sensitiveBalances = document.querySelectorAll(".sensitive");
@@ -403,59 +375,8 @@ setTimeout(() => {
     });
   }
 
-  // ===== CHANGE PASSWORD =====
-  const passwordForm = document.getElementById("password-form");
-  if (passwordForm) {
-    const passwordMessage = document.getElementById("password-message");
-    passwordForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const current = document.getElementById("currentPassword").value;
-      const newP = document.getElementById("newPassword").value;
-      const confirmP = document.getElementById("confirmPassword").value;
-
-      if (current !== demoUser.password) {
-        passwordMessage.textContent = "Current password is incorrect!";
-        passwordMessage.className = "error";
-        return;
-      }
-      if (newP.length < 6) {
-        passwordMessage.textContent = "New password must be at least 6 characters!";
-        passwordMessage.className = "error";
-        return;
-      }
-      if (newP !== confirmP) {
-        passwordMessage.textContent = "New passwords do not match!";
-        passwordMessage.className = "error";
-        return;
-      }
-
-      demoUser.password = newP;
-      localStorage.setItem("demoUser", JSON.stringify(demoUser));
-      passwordMessage.textContent = "Password reset link sent to email ✔";
-      passwordMessage.className = "success";
-
-      passwordForm.reset();
-    });
-  }
-
-    // ===== DOWNLOAD RECEIPT =====
-const downloadBtn = document.getElementById("download-receipt-btn");
-if (downloadBtn) {
-  downloadBtn.onclick = () => {
-    const receipt = document.getElementById("receipt");
-    html2pdf().from(receipt).save();
-  };
-}
-
-// Optional: Close Success Modal
-function closeSuccess() {
-  const modal = document.getElementById("success-modal");
-  if (modal) modal.style.display = "none";
-}
-        
-  // ===== PROFILE PANEL =====
-  const profileBtn = document.getElementById("profile-btn");
-  const profilePanel = document.getElementById("profile-panel");
-  const closeProfileBtn = document.getElementById("close-profile");
-  const editProfileBtn = document.getElementById("edit-profile");
-  const accountSettingsBtn = document.getElementById("
+  // ===== DOWNLOAD RECEIPT =====
+  const downloadBtn = document.getElementById("download-receipt-btn");
+  if (downloadBtn) {
+    downloadBtn.onclick = () => {
+      const receipt =
