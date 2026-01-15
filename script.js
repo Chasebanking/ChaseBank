@@ -24,39 +24,65 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===== LOGIN HANDLER =====
+  document.addEventListener("DOMContentLoaded", () => {
+  // ===== DEMO USER =====
+  let demoUser = JSON.parse(localStorage.getItem("demoUser"));
+  if (!demoUser) {
+    demoUser = {
+      fullName: "Charles Williams",
+      email: "Charlesweahh@gmail.com",
+      phone: "+1 510 367 1796",
+      password: "1346000", // default password
+      emailNotif: true,
+      smsNotif: false
+    };
+    localStorage.setItem("demoUser", JSON.stringify(demoUser));
+  }
+
+  // ===== LOGIN FORM HANDLER =====
   const loginForm = document.getElementById("login-form");
+  const messageEl = document.getElementById("login-message");
+
   if (loginForm) {
-    const messageEl = document.getElementById("login-message");
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const username = document.getElementById("username")?.value?.trim() || "";
-      const password = document.getElementById("password")?.value || "";
 
-      if (!username || !password) return;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
 
-      if (messageEl) {
-        messageEl.style.color = "blue";
-        messageEl.textContent = "Checking credentials...";
+      if (!username || !password) {
+        messageEl.style.color = "red";
+        messageEl.textContent = "Please enter both username and password.";
+        return;
       }
 
+      // Show checking message
+      messageEl.style.color = "blue";
+      messageEl.textContent = "Checking credentials...";
+
       setTimeout(() => {
-        const savedUser = JSON.parse(localStorage.getItem("demoUser")) || {};
-        if (username === savedUser.fullName && password === savedUser.password) {
-          if (messageEl) {
-            messageEl.style.color = "green";
-            messageEl.textContent = "Login successful! Redirecting...";
-            localStorage.setItem("loggedIn", "true");
-          }
-          setTimeout(() => window.location.href = "dashboard.html", 1000);
+        if (username === demoUser.fullName && password === demoUser.password) {
+          localStorage.setItem("loggedIn", "true"); // key that dashboard checks
+          messageEl.style.color = "green";
+          messageEl.textContent = "Login successful! Redirecting...";
+
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 500); // short delay
         } else {
-          if (messageEl) {
-            messageEl.style.color = "red";
-            messageEl.textContent = "Invalid username or password.";
-          }
+          messageEl.style.color = "red";
+          messageEl.textContent = "Invalid username or password.";
         }
-      }, 1500);
+      }, 500);
     });
   }
+
+  // ===== AUTO REDIRECT IF ALREADY LOGGED IN =====
+  if (localStorage.getItem("loggedIn") && window.location.pathname.endsWith("index.html")) {
+    // Already logged in, skip login
+    window.location.href = "dashboard.html";
+  }
+});
 
   // ===== DASHBOARD ELEMENTS =====
   const sendForm = document.getElementById("send-money-form");
