@@ -473,6 +473,20 @@ if (downloadReceiptBtn) {
     doc.save(`${id}.pdf`);
   });
 }
+  // ===== BALANCE TOGGLE =====
+  const balanceToggleBtn = document.getElementById("toggle-balance");
+  const sensitiveBalances = document.querySelectorAll(".sensitive");
+  let visible = true;
+  const originalValues = [];
+  sensitiveBalances.forEach(el => originalValues.push(el.textContent));
+  if (balanceToggleBtn) balanceToggleBtn.addEventListener("click", () => {
+    sensitiveBalances.forEach((el, index) => {
+      el.textContent = visible ? "••••••" : originalValues[index];
+      el.classList.toggle("hidden", visible);
+    });
+    balanceToggleBtn.textContent = visible ? "👁‍🗨" : "👁";
+    visible = !visible;
+  });
   
   // ===== REQUEST MONEY =====
   const requestMoneyForm = document.getElementById("request-money-form");
@@ -520,18 +534,3 @@ document.addEventListener("click", e => {
 
 if (editProfileBtn) editProfileBtn.addEventListener("click", () => window.location.href = "profile.html");
 if (accountSettingsBtn) accountSettingsBtn.addEventListener("click", () => window.location.href = "account.html");
-
-// ===== BALANCE TOGGLE =====
-  const balanceToggleBtn = document.getElementById("toggle-balance");
-  const sensitiveBalances = document.querySelectorAll(".sensitive");
-  let visible = true;
-  const originalValues = [];
-  sensitiveBalances.forEach(el => originalValues.push(el.textContent));
-  if (balanceToggleBtn) balanceToggleBtn.addEventListener("click", () => {
-    sensitiveBalances.forEach((el, index) => {
-      el.textContent = visible ? "••••••" : originalValues[index];
-      el.classList.toggle("hidden", visible);
-    });
-    balanceToggleBtn.textContent = visible ? "👁‍🗨" : "👁";
-    visible = !visible;
-  });
