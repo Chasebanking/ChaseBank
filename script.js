@@ -248,10 +248,21 @@
         transactionsList.insertBefore(li, transactionsList.firstChild);
       }
 
-      
-
-       // ===== SEND MONEY =====
-       if (sendForm) {
+       // Show success modal if present  
+       const successModal = $("success-modal");  
+       if (status === "completed" && successModal) {  
+       successModal.style.display = "flex";  
+       const rid = $("r-id"); if (rid) rid.textContent = Math.floor(Math.random() * 1000000);  
+       const rname = $("r-name"); if (rname) rname.textContent = text;  
+       const rRecipient = $("r-recipient");  
+       if (rRecipient) rRecipient.textContent = `${details.recipient} — ${details.account}`;  
+       const ramount = $("r-amount"); if (ramount) ramount.textContent = Number(amtValue).toFixed(2);  
+       const rdate = $("r-date"); if (rdate) rdate.textContent = new Date().toLocaleDateString();  
+      }  
+     } 
+    
+      // ===== SEND MONEY =====
+      if (sendForm) {
        sendForm.addEventListener("submit", e => {
        e.preventDefault();
 
