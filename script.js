@@ -380,17 +380,19 @@
 
     // Start processing animation
     if (targetBtn) {
-      targetBtn.disabled = true;
-      let dots = 0;
-      const loader = setInterval(() => {
-        dots = (dots + 1) % 4;
-        targetBtn.textContent = "Processing" + ".".repeat(dots);
-      }, 400);
+    targetBtn.disabled = true;
+    let dots = 0;
+    const loader = setInterval(() => {
+    dots = (dots + 1) % 4;
+    targetBtn.textContent = "Processing" + ".".repeat(dots);
+  }, 400);
 
-      setTimeout(() => {
-        clearInterval(loader);
-
-        // ===== SPECIAL CASE: Wells Fargo GOES TO ERROR PAGE =====
+     setTimeout(() => {
+     clearInterval(loader);
+  }, 4000); // Keep same 4-second duration for the animation
+}
+      
+       // ===== SPECIAL CASE: Wells Fargo GOES TO ERROR PAGE =====
         if (action === "send" && details.bank === "WEF" && details.account === "15623948807") {
           if (sendForm) sendForm.reset();
           if (toggleTransferBtn) toggleTransferBtn.textContent = "Transfer Funds";
