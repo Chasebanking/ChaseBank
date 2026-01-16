@@ -620,7 +620,10 @@ if (cancelPinBtn) {
   });
   }
 
-    if (closeProfileBtn) closeProfileBtn.addEventListener("click", () => { if (profilePanel) profilePanel.style.display = "none"; });
+    if (closeProfileBtn) closeProfileBtn.addEventListener("click", () => {
+    if (profilePanel) profilePanel.style.display = "none";   // hide the profile panel
+    if (profileConnector) profileConnector.style.display = "none"; // ✅ hide the connector too
+   });
 
     document.addEventListener("click", e => {
       if (profilePanel && profilePanel.style.display === "block" && !profilePanel.contains(e.target) && profileBtn && !profileBtn.contains(e.target)) {
