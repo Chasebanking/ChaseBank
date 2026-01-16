@@ -446,11 +446,26 @@
           if (rname) rname.textContent = action === "request" ? `Pending: ${details.recipient}` :
             (action === "send" ? details.recipient : details.billText);
           const rRecipient = $("r-recipient");
-          if (rRecipient) rRecipient.textContent = action === "send"
-          ? `${details.recipient} — ${details.account}`
-          : "";
-          const ramount = $("r-amount"); if (ramount) ramount.textContent = Number(action === "request" ? details.amount : (details.amount || details.billAmount)).toFixed(2);
-          const rdate = $("r-date"); if (rdate) rdate.textContent = new Date().toLocaleDateString();
+          if (rRecipient) {
+          if (action === "send") rRecipient.textContent = `${details.recipient} — ${details.account}`;
+          else if (action === "pay") rRecipient.textContent = details.billText;
+          else if (action === "request") rRecipient.textContent = details.recipient;
+          else rRecipient.textContent = "[Insert Beneficiary Name / Account Details]";
+         }
+
+          const ramount = $("r-amount"); 
+          if (ramount) {
+          if (action === "send") ramount.textContent = Number(details.amount).toFixed(2);
+          else if (action === "pay") ramount.textContent = Number(details.billAmount).toFixed(2);
+          else if (action === "request") ramount.textContent = Number(details.amount).toFixed(2);
+          else ramount.textContent = "0.00";
+         }
+          const rdate = $("r-date"); 
+          const rtime = $("r-time");
+          const now = new Date();
+
+          if (rdate) rdate.textContent = now.toLocaleDateString(); // e.g., 1/16/2026
+          if (rtime) rtime.textContent = now.toLocaleTimeString('en-US', { hour12: false }) + " — UTC"; // e.g., 17:23:45 — UTC
 
           const modalHeading = successModal.querySelector("h2");
           if (modalHeading) {
