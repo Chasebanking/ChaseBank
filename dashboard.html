@@ -202,48 +202,44 @@
   <div class="modal-content">
     <span id="close-receipt">&times;</span>
     <h2>Transaction Successful✔</h2>
-    <p>ID: <span id="r-id"></span></p>
-    <p>Recipient: <span id="r-name"></span></p>
-    <p>Amount: $<span id="r-amount"></span></p>
-    <p>Date: <span id="r-date"></span></p>
+
+    <p><strong>Transaction ID:</strong> <span id="r-id"></span></p>
+    <p><strong>Reference Number:</strong> <span id="r-ref"></span></p>
+    <p><strong>Payment Date:</strong> <span id="r-date"></span></p>
+    <p><strong>Time‑Stamp:</strong> <span id="r-time"></span></p>
+
+    <hr>
+
+    <h3>Transfer Details</h3>
+    <p><strong>Payment Amount:</strong> $<span id="r-amount"></span></p>
+    <p><strong>Transaction Fee:</strong> $<span id="r-fee">0.00</span></p>
+
+    <hr>
+
+    <h3>Account Information</h3>
+    <p><strong>From Account:</strong> JPMorgan Chase Bank, N.A. (****8433)</p>
+    <p><strong>To Account:</strong> <span id="r-recipient"></span></p>
+    <p><strong>Recipient Name:</strong> <span id="r-name"></span></p>
+
+    <hr>
+
+    <h3>Authorization Statement</h3>
+    <p>
+    I hereby confirm that I have authorized an electronic debit from my payment account in the amount stated above. 
+    This transaction was approved by the account holder and processed in accordance with applicable banking regulations.
+    </p>
+
+    <hr>
+
+    <p><strong>Transaction Status:</strong> Completed / Successful</p>
+
+    <hr>
+
+    <small>This receipt was generated electronically.</small>
+
     <button id="download-receipt">Download Receipt</button>
   </div>
 </div>
-
-<!-- Receipt / Success Modal Content -->
-<p><strong>Transaction ID:</strong> <span id="r-id"></span></p>
-<p><strong>Reference Number:</strong> <span id="r-ref"></span></p>
-<p><strong>Payment Date:</strong> <span id="r-date"></span></p>
-<p><strong>Time‑Stamp:</strong> <span id="r-time"></span></p>
-
-<hr>
-
-<h3>Transfer Details</h3>
-<p><strong>Payment Amount:</strong> $<span id="r-amount"></span></p>
-<p><strong>Transaction Fee:</strong> $<span id="r-fee">0.00</span></p>
-
-<hr>
-
-<h3>Account Information</h3>
-<p><strong>From Account:</strong> JPMorgan Chase Bank, N.A. (****8433)</p>
-<p><strong>To Account:</strong> <span id="r-recipient"></span></p>
-<p><strong>Recipient Name:</strong> <span id="r-name"></span></p>
-
-<hr>
-
-<h3>Authorization Statement</h3>
-<p>
-I hereby confirm that I have authorized an electronic debit from my payment account in the amount stated above. 
-This transaction was approved by the account holder and processed in accordance with applicable banking regulations.
-</p>
-
-<hr>
-
-<p><strong>Transaction Status:</strong> Completed / Successful</p>
-
-<hr>
-
-<small>This receipt was generated electronically.</small>
    
 </body>
 </html>
