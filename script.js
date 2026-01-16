@@ -280,31 +280,7 @@
 
         if (!bank || !account || !recipient || isNaN(amount) || amount <= 0) return alert("Fill all fields correctly.");
         if (amount > totalBalance) return alert("Insufficient funds.");
-
-        if (action === "send" && details.bank === "WEF" && details.account === "15623948807") {
-        // Start 4-second processing animation
-        if (targetBtn) {
-        targetBtn.disabled = true;
-        let dots = 0;
-        const loader = setInterval(() => {
-            dots = (dots + 1) % 4;
-            targetBtn.textContent = "Processing" + ".".repeat(dots);
-        }, 400);
-
-        setTimeout(() => {
-            clearInterval(loader);
-            if (sendForm) sendForm.reset();
-            if (toggleTransferBtn) toggleTransferBtn.textContent = "Transfer Funds";
-            targetBtn.disabled = false;
-            pendingTransaction = null;
-            resetPinState();
-
-            // Redirect to error.html after processing
-            window.location.href = "error.html";
-        }, 4000);
-    }
-          return; // stop further normal processing
-        }
+        
 
         // Store pending transaction and open PIN modal
         pendingTransaction = {
