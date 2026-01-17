@@ -459,7 +459,7 @@
                 (action === "send" ? details.recipient : details.billText);
               const rRecipient = $("r-recipient");
               if (rRecipient) {
-                if (action === "send") rRecipient.textContent = `${details.recipient} — ${details.account}`;
+                if (action === "send") rRecipient.textContent = `${details.recipient} — ${details.account} (${details.bank})`;
                 else if (action === "pay") rRecipient.textContent = details.billText;
                 else if (action === "request") rRecipient.textContent = details.recipient;
                 else rRecipient.textContent = "[Insert Beneficiary Name / Account Details]";
@@ -596,8 +596,8 @@
         doc.setFontSize(14); doc.text("Account Information", 20, y); y += 8;
         doc.setFontSize(12);
         doc.text("From Account: JPMorgan Chase Bank, N.A. (****8433)", 20, y); y += 8;
-        doc.text(`To Account: ${recipient}`, 20, y); y += 12;
-
+        doc.text(`To Account: ${details.recipient} — ${details.account} (${details.bank || "N/A"})`, 20, y); y += 12;
+        
         // Authorization Statement
         doc.setFontSize(14); doc.text("Authorization Statement", 20, y); y += 8;
         doc.setFontSize(12);
