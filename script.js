@@ -56,23 +56,20 @@
       }, 0);
     }
 
-    // ===== TOTAL BALANCE =====
-    const balanceEl = document.querySelector(".balance");
-    let totalBalance = parseFloat(localStorage.getItem("totalBalance"));
+     // ===== TOTAL BALANCE =====
+     const balanceEl = document.querySelector(".balance");
+     let totalBalance = parseFloat(localStorage.getItem("totalBalance"));
 
-    if (isNaN(totalBalance)) {
-    // Compute from transactions if no previous balance stored
-    totalBalance = computeBalanceFromTransactions(savedTransactions);
-  }
+     // If no stored balance, compute from transactions
+     if (isNaN(totalBalance)) {
+     totalBalance = computeBalanceFromTransactions(savedTransactions);
+   }
 
-    // ===== MANUAL ADD TO BALANCE =====
-    // Increase totalBalance manually here
-    totalBalance += 1500000; // <-- change this number anytime to add more funds
+    // ===== MANUAL SET OR ADD BALANCE =====
+    totalBalance = 1500000; // <-- Replace with exact balance you want, overrides any computed balance
 
-   // Save permanently
-   localStorage.setItem("totalBalance", String(totalBalance));
-
-   // Update display
+    // Save and display
+    localStorage.setItem("totalBalance", String(totalBalance));
     if (balanceEl) balanceEl.textContent = formatCurrency(totalBalance);
     
     // ===== LOGIN FORM =====
